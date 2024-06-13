@@ -1,7 +1,7 @@
 #!/usr/bin/env nextflow
 nextflow.enable.dsl=2
 
-params.input_mri_file = "./test/test.usi"
+params.input_mri_file = "./test/test.tsv"
 
 TOOL_FOLDER = "$baseDir/bin"
 
