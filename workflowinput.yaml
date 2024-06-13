@@ -1,7 +1,7 @@
 workflowname: download_public_data_workflow
 workflowdescription: download_public_data_workflow
 workflowlongdescription: This is the download_public_data_workflow for GNPS2
-workflowversion: "0.1"
+workflowversion: "2024.06.13"
 workflowfile: nf_workflow.nf
 workflowautohide: false
 adminonly: false
