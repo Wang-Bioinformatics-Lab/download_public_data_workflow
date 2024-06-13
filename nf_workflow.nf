@@ -11,15 +11,14 @@ process processDownload {
     conda "$TOOL_FOLDER/conda_env.yml"
 
     input:
-    file input 
+    file input_mri
 
     output:
     file 'summary.tsv'
 
-
     """
     python $TOOL_FOLDER/download_public_data_usi.py \
-    $input \
+    $input_mri \
     python_output.tsv \
     downloaded \
     summary.tsv \
