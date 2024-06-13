@@ -12,10 +12,10 @@ parameterlist:
 
     - displayname: Input Data Folder
       paramtype: fileselector
-      nf_paramname: input_spectra
+      nf_paramname: input_mri_file
       formplaceholder: Enter the path to data
       formvalue: ""
-      targettaskfolder: input_spectra
+      targettaskfolder: input_mri_file
       optional: false
       selectsinglefile: false
       folderunroll: true
