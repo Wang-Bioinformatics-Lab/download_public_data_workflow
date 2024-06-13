@@ -4,3 +4,6 @@
 [submodule "downloadpublicdata"]
 	path = downloadpublicdata
 	url = ../downloadpublicdata
+[submodule "bin/downloadpublicdata"]
+	path = bin/downloadpublicdata
+	url = https://github.com/Wang-Bioinformatics-Lab/downloadpublicdata.git
