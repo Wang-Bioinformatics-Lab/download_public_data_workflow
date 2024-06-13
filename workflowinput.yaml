@@ -17,5 +17,5 @@ parameterlist:
       formvalue: ""
       targettaskfolder: input_mri_file
       optional: false
-      selectsinglefile: false
+      selectsinglefile: true
       folderunroll: true
