@@ -17,10 +17,11 @@ process processDownload {
     file 'summary.tsv'
 
     """
+    mkdir downloaddatafolder
     python $TOOL_FOLDER/download_public_data_usi.py \
     $input_mri \
     python_output.tsv \
-    downloaded \
+    downloaddatafolder \
     summary.tsv \
     --nestfiles 'recreate'
     """
