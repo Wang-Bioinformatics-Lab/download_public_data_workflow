@@ -14,10 +14,12 @@ process processDataPython {
     file input 
 
     output:
-    file 'python_output.tsv'
+    file 'summary.tsv'
+    path ''
+
 
     """
-    python $TOOL_FOLDER/python_script.py $input python_output.tsv
+    python $TOOL_FOLDER/download_public_data_usi.py $input python_output.tsv downloaded summary.tsv --nestfiles 'recreate'
     """
 }
 

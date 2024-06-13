@@ -1,6 +1,6 @@
-workflowname: template_nextflow_workflow
-workflowdescription: template_nextflow_workflow
-workflowlongdescription: This is a template nextflow workflow for GNPS2
+workflowname: download_public_data_workflow
+workflowdescription: download_public_data_workflow
+workflowlongdescription: This is the download_public_data_workflow for GNPS2
 workflowversion: "0.1"
 workflowfile: nf_workflow.nf
 workflowautohide: false
