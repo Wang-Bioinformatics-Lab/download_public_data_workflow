@@ -4,7 +4,7 @@ workflowlongdescription: This is the download_public_data_workflow for GNPS2
 workflowversion: "2024.06.13"
 workflowfile: nf_workflow.nf
 workflowautohide: false
-adminonly: false
+adminonly: true
 #This maps the parameters from an input form to those that will appear in nextflow
 parameterlist:
     - displayname: File Selection
