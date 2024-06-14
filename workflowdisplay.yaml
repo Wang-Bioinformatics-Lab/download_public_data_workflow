@@ -8,6 +8,10 @@ Views:
     parameters:
         filename: nf_output/summary.tsv
         columns:
-            -   title: "filename"
-                data: filename
+            -   title: "usi"
+                data: usi
+            -   title: "target_path"
+                data: target_path
+            -   title: "status"
+                data: status
             
