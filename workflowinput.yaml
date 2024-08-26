@@ -1,7 +1,7 @@
 workflowname: download_public_data_workflow
 workflowdescription: download_public_data_workflow
 workflowlongdescription: This is the download_public_data_workflow for GNPS2
-workflowversion: "2024.06.14"
+workflowversion: "2024.08.24"
 workflowfile: nf_workflow.nf
 workflowautohide: false
 adminonly: true
@@ -19,3 +19,13 @@ parameterlist:
       optional: false
       selectsinglefile: true
       folderunroll: true
+
+    - displayname: parallelism
+      paramtype: select
+      nf_paramname: parallelism
+      formvalue: "10"
+      options:
+        - value: "1"
+          display: "1"
+        - value: "10"
+          display: "10"
