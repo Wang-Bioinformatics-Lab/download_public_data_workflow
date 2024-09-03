@@ -11,7 +11,7 @@ def process_csv(input_file, lines_per_file, output_folder=None):
             os.makedirs(output_folder)
     
     # Read the CSV file using pandas
-    df = pd.read_csv(input_file, encoding='utf-8-sig')
+    df = pd.read_csv(input_file, encoding='utf-8-sig', sep="\t")
     
     # Calculate the number of smaller files needed
     total_lines = len(df)
