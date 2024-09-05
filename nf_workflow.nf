@@ -4,6 +4,7 @@ nextflow.enable.dsl=2
 params.input_mri_file = "./data/test_downloadpublicdata.txt"
 params.parallelism = "1"
 params.filepersplit = "1000"
+params.dryrun = "Yes"
 
 params.datasetlocation = "/data/datasets/server"
 
@@ -43,12 +44,18 @@ process processDownload {
     output:
     file '*summary.tsv'
 
+    script:
+    def dryrunFlag = params.dryrun == 'Yes' ? '--dryrun' : ''
+
+    
     """
     python $TOOL_FOLDER/download_public_data_usi.py \
     $input_mri \
     $dataset_location \
     ${input_mri}_summary.tsv \
-    --nestfiles 'recreate'
+    --nestfiles 'recreate' \
+    --noconversion \ 
+    $dryrunFlag
     """
 }
 
