@@ -47,15 +47,14 @@ process processDownload {
     script:
     def dryrunFlag = params.dryrun == 'Yes' ? '--dryrun' : ''
 
-    
     """
     python $TOOL_FOLDER/download_public_data_usi.py \
     $input_mri \
     $dataset_location \
     ${input_mri}_summary.tsv \
     --nestfiles 'recreate' \
-    --noconversion \ 
-    $dryrunFlag
+    --noconversion \
+    ${dryrunFlag}
     """
 }
 
