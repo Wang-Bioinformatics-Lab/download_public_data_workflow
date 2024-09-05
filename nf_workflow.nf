@@ -48,7 +48,7 @@ process processDownload {
     def dryrunFlag = params.dryrun == 'Yes' ? '--dryrun' : ''
 
     """
-    python $TOOL_FOLDER/download_public_data_usi.py \
+    python $TOOL_FOLDER/downloadpublicdata/bin/download_public_data_usi.py \
     $input_mri \
     $dataset_location \
     ${input_mri}_summary.tsv \
