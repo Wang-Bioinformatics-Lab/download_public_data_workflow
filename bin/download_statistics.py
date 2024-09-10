@@ -20,7 +20,6 @@ def count_status_entries(input_file):
         for row in reader:
             usi = row['usi']
             status = row['status']
-            #for prefix in prefix_status_mapping.keys():
             for prefix in data_source_prefix:
                 if usi.startswith(prefix):
                     counters[prefix][status] += 1
@@ -34,7 +33,6 @@ def write_output_file(output_file):
         writer.writerow(['Status', 'MSV', 'ST', 'MTBLS', 'Row_Total'])
         
         # Calculate and write each row of the table with totals
-        #for status in prefix_status_mapping.values():
         for status in status_list:
             msv_count = counters["mzspec:MSV"].get(status, 0)
             st_count = counters["mzspec:ST"].get(status, 0)

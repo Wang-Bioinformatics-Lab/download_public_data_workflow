@@ -19,7 +19,7 @@ process processDownload {
     """
     python $TOOL_FOLDER/download_public_data_usi.py \
     $input_mri \
-    /home/user/LabData/taoxu/projects/download_public_data_workflow/data/datasets/server \
+    /data/datasets/server \
     summary.tsv \
     --nestfiles 'recreate'
     """
