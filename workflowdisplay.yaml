@@ -15,3 +15,20 @@ Views:
             -   title: "status"
                 data: status
             
+-   name: Download Statistics
+    displayname: Download Statistics
+    viewname: downloadstatistics
+    displaytype: datatable
+    parameters:
+        filename: nf_output/download_summary_statistics.tsv
+        columns:
+            -   title: "Status"
+                data: Status
+            -   title: "MSV"
+                data: MSV
+            -   title: "ST"
+                data: ST
+            -   title: "MTBLS"
+                data: MTBLS
+            -   title: "Row_Total"
+                data: Row_Total
