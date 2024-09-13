@@ -59,6 +59,24 @@ process processDownload {
 }
 
 
+process processDownload_Statistics {
+    publishDir "./nf_output", mode: 'copy'
+
+    conda "$TOOL_FOLDER/conda_env.yml"
+
+    input:
+    file input
+
+    output:
+    file 'download_summary_statistics.tsv'
+
+
+    """
+    python $TOOL_FOLDER/download_statistics.py \
+    $input \
+    .
+    """
+}
 
 
 workflow {
@@ -72,7 +90,9 @@ workflow {
     summaries_ch = processDownload(splits_ch.collect(), dataset_location_ch)
 
     // Merging the summaries, keeping the headers
-    summaries_ch.collectFile( name: 'summary.tsv', keepHeader: true, storeDir: './nf_output' )
+    statistics_ch = summaries_ch.collectFile( name: 'summary.tsv', keepHeader: true, storeDir: './nf_output' )
+
+    processDownload_Statistics(statistics_ch)
 
 
 
