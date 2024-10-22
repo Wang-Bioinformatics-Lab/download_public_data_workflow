@@ -9,6 +9,7 @@ data_source_prefix = ["mzspec:MSV", "mzspec:ST", "mzspec:MTBLS"]
 
 # Define all possible download status
 status_list = ["DOWNLOADED_INTO_OUTPUT_WITHOUT_CACHE", "EXISTS_IN_OUTPUT", "DRYRUN_TO_DOWNLOAD", "ERROR"]
+#status_list = ["CACHE_ERROR_DOWNLOAD_DIRECT", "DOWNLOADED_INTO_OUTPUT_WITHOUT_CACHE", "DOWNLOADED_INTO_OUTPUT_WITH_CACHE", "DOWNLOAD_ERROR", "DRYRUN_TO_DOWNLOAD", "ERROR", "ERROR_CONVERSION_NOT_READY", "ERROR_DATA_TOO_SMALL", "EXISTS_IN_CACHE", "EXISTS_IN_DATASET", "EXISTS_IN_OUTPUT"]
 
 # Initialize counters for each status and prefix combination
 counters = defaultdict(lambda: defaultdict(int))
