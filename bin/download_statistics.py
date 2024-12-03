@@ -2,17 +2,28 @@ import sys
 import os
 import csv
 from collections import defaultdict
+from datetime import datetime
 import argparse
 
 # Define the prefixes of the data sources 
 data_source_prefix = ["mzspec:MSV", "mzspec:ST", "mzspec:MTBLS"]
 
 # Define all possible download status
-status_list = ["DOWNLOADED_INTO_OUTPUT_WITHOUT_CACHE", "EXISTS_IN_OUTPUT", "DRYRUN_TO_DOWNLOAD", "ERROR"]
+#status_list = ["DOWNLOADED_INTO_OUTPUT_WITHOUT_CACHE", "EXISTS_IN_OUTPUT", "DRYRUN_TO_DOWNLOAD", "ERROR"]
+status_list = ["DOWNLOADED_INTO_OUTPUT_WITHOUT_CACHE", "EXISTS_IN_OUTPUT", "ERROR_DATA_TOO_SMALL", "ERROR"]
 #status_list = ["CACHE_ERROR_DOWNLOAD_DIRECT", "DOWNLOADED_INTO_OUTPUT_WITHOUT_CACHE", "DOWNLOADED_INTO_OUTPUT_WITH_CACHE", "DOWNLOAD_ERROR", "DRYRUN_TO_DOWNLOAD", "ERROR", "ERROR_CONVERSION_NOT_READY", "ERROR_DATA_TOO_SMALL", "EXISTS_IN_CACHE", "EXISTS_IN_DATASET", "EXISTS_IN_OUTPUT"]
 
 # Initialize counters for each status and prefix combination
 counters = defaultdict(lambda: defaultdict(int))
+
+# Function to get datatime as string with hour and minutes
+def get_datetime():
+    current_datetime = datetime.now()
+
+    # Format the datetime as a string with minutes
+    datetime_string = current_datetime.strftime("%Y-%m-%d-%H-%M")
+
+    return datetime_string
 
 # Function to process the input TSV file and count entries
 def count_status_entries(input_file):
@@ -66,7 +77,10 @@ if __name__ == "__main__":
         os.makedirs(args.output_folder, exist_ok=True)
 
     # Define the output file name 
-    output_file = os.path.join(args.output_folder, "download_summary_statistics.tsv")
+    datetime_str = get_datetime()
+    outfilename = "download_summary_statistics_" + datetime_str + ".tsv"
+    #output_file = os.path.join(args.output_folder, "download_summary_statistics.tsv")
+    output_file = os.path.join(args.output_folder, outfilename)
     
     # Process the input file and write the output
     count_status_entries(input_file)
