@@ -101,10 +101,10 @@ workflow {
     dataset_location_ch = Channel.fromPath(params.datasetlocation)
 
     if(params.autodownload == 'Yes') {
-        mri_file_ch = Channel.fromPath(params.input_mri_file)
+        mri_file_ch = autodownload(1)
     }
     else{
-        mri_file_ch = autodownload(1)
+        mri_file_ch = Channel.fromPath(params.input_mri_file)
     }
 
 
