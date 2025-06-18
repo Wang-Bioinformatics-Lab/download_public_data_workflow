@@ -7,6 +7,9 @@ params.filepersplit = "1000"
 params.autodownload = "No"
 params.dryrun = "Yes"
 
+// Parsing
+parallelism = params.parallelism.toInteger()
+
 params.datasetlocation = "/data/datasets/server"
 
 TOOL_FOLDER = "$baseDir/bin"
@@ -52,7 +55,7 @@ process processDownload {
 
     conda "$TOOL_FOLDER/conda_env.yml"
 
-    maxForks params.parallelism
+    maxForks parallelism
 
     input:
     each file(input_mri)
