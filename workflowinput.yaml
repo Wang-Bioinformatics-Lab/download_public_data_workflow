@@ -63,4 +63,9 @@ parameterlist:
           display: "mzspec:MSV"
         - value: "mzspec:NORMAN"
           display: "mzspec:NORMAN"
+        - value: "mzspec:MTBLS"
+          display: "mzspec:MTBLS"
+        - value: "mzspec:ST"
+          display: "mzspec:ST"
+        
 
