@@ -1,51 +1,96 @@
 import sys
 import os
-import csv
+import pandas as pd
 from collections import defaultdict
 import argparse
 
 # Define the prefixes of the data sources 
-data_source_prefix = ["mzspec:MSV", "mzspec:ST", "mzspec:MTBLS"]
+data_source_prefix = ["mzspec:MSV", "mzspec:ST", "mzspec:MTBLS", "mzspec:NORMAN"]
 
 # Define all possible download status
 status_list = ["DOWNLOADED_INTO_OUTPUT_WITHOUT_CACHE", "EXISTS_IN_OUTPUT", "DRYRUN_TO_DOWNLOAD", "ERROR"]
 
-# Initialize counters for each status and prefix combination
-counters = defaultdict(lambda: defaultdict(int))
-
 # Function to process the input TSV file and count entries
 def count_status_entries(input_file):
-    with open(input_file, mode='r') as file:
-        reader = csv.DictReader(file, delimiter='\t')
-        for row in reader:
-            usi = row['usi']
-            status = row['status']
-            for prefix in data_source_prefix:
-                if usi.startswith(prefix):
-                    counters[prefix][status] += 1
+    file_status_df = pd.read_csv(input_file, sep='\t', dtype=str)
+
+    # Initialize counters for each status and prefix combination
+    counters = defaultdict(lambda: defaultdict(int))
+
+    files_status_json = file_status_df.to_dict(orient='records')
+
+    for row in files_status_json:
+        usi = row['usi']
+        status = row['status']
+        for prefix in data_source_prefix:
+            if usi.startswith(prefix):
+                counters[prefix][status] += 1
+
+    return counters
 
 # Function to write the results to an output TSV file with row and column totals
-def write_output_file(output_file):
-    with open(output_file, mode='w', newline='') as file:
-        writer = csv.writer(file, delimiter='\t')
+def write_output_file(file_counter, output_filename):
+    # prepare_output
+    output_list = []
+
+    for status in status_list:
+        output_dict = {}
+        output_dict['Status'] = status
+
+        for prefix in data_source_prefix:
+            count = file_counter[prefix].get(status, 0)
+            output_dict[prefix] = count
+
+        output_dict['Row_Total'] = sum(output_dict[prefix] for prefix in data_source_prefix if prefix in output_dict)
+
+        output_list.append(output_dict)
         
-        # Write header with additional "Total" column
-        writer.writerow(['Status', 'MSV', 'ST', 'MTBLS', 'Row_Total'])
+    # column totals
+    output_dict = {'Status': 'Column_Total'}
+
+    for prefix in data_source_prefix:
+        total_count = sum(file_counter[prefix].values())
+        output_dict[prefix] = total_count
+        output_dict['Row_Total'] = sum(output_dict[prefix] for prefix in data_source_prefix if prefix in output_dict)
+
+    output_list.append(output_dict)
+
+    # writing it out to file
+    output_df = pd.DataFrame(output_list)
+
+    # remapping some names
+    output_df.rename(columns={
+        'mzspec:MSV': 'MSV',
+        'mzspec:ST': 'ST',
+        'mzspec:MTBLS': 'MTBLS',
+        'mzspec:NORMAN': 'NORMAN'
+    }, inplace=True)
+
+    output_df.to_csv(output_filename, sep='\t', index=False)
+
+
+
+
+    # with open(output_file, mode='w', newline='') as file:
+    #     writer = csv.writer(file, delimiter='\t')
         
-        # Calculate and write each row of the table with totals
-        for status in status_list:
-            msv_count = counters["mzspec:MSV"].get(status, 0)
-            st_count = counters["mzspec:ST"].get(status, 0)
-            mtbls_count = counters["mzspec:MTBLS"].get(status, 0)
-            row_total = msv_count + st_count + mtbls_count
-            writer.writerow([status, msv_count, st_count, mtbls_count, row_total])
+    #     # Write header with additional "Total" column
+    #     writer.writerow(['Status', 'MSV', 'ST', 'MTBLS', 'Row_Total'])
         
-        # Calculate and write the column totals and grand total
-        msv_total = sum(counters["mzspec:MSV"].values())
-        st_total = sum(counters["mzspec:ST"].values())
-        mtbls_total = sum(counters["mzspec:MTBLS"].values())
-        grand_total = msv_total + st_total + mtbls_total
-        writer.writerow(['Column_Total', msv_total, st_total, mtbls_total, grand_total])
+    #     # Calculate and write each row of the table with totals
+    #     for status in status_list:
+    #         msv_count = counters["mzspec:MSV"].get(status, 0)
+    #         st_count = counters["mzspec:ST"].get(status, 0)
+    #         mtbls_count = counters["mzspec:MTBLS"].get(status, 0)
+    #         row_total = msv_count + st_count + mtbls_count
+    #         writer.writerow([status, msv_count, st_count, mtbls_count, row_total])
+        
+    #     # Calculate and write the column totals and grand total
+    #     msv_total = sum(counters["mzspec:MSV"].values())
+    #     st_total = sum(counters["mzspec:ST"].values())
+    #     mtbls_total = sum(counters["mzspec:MTBLS"].values())
+    #     grand_total = msv_total + st_total + mtbls_total
+    #     writer.writerow(['Column_Total', msv_total, st_total, mtbls_total, grand_total])
 
 if __name__ == "__main__":
 
@@ -54,22 +99,22 @@ if __name__ == "__main__":
     parser.add_argument('output_folder', help='Output Folder where the data goes')
 
     args = parser.parse_args()
-    input_file = args.input_download_file 
+    input_filename = args.input_download_file 
 
     # checking the input file exists
-    if not os.path.isfile(input_file):
-        print(f"Input file {input_file} does not exist")
+    if not os.path.isfile(input_filename):
+        print(f"Input file {input_filename} does not exist")
         exit(0)
     
     if not os.path.isdir(args.output_folder):
         os.makedirs(args.output_folder, exist_ok=True)
 
     # Define the output file name 
-    output_file = os.path.join(args.output_folder, "download_summary_statistics.tsv")
+    output_filename = os.path.join(args.output_folder, "download_summary_statistics.tsv")
     
     # Process the input file and write the output
-    count_status_entries(input_file)
-    write_output_file(output_file)
+    file_counter = count_status_entries(input_filename)
+    write_output_file(file_counter, output_filename)
     
-    print(f"Results with totals have been written to {output_file}")
+    print(f"Results with totals have been written to {output_filename}")
 

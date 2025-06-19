@@ -50,3 +50,17 @@ parameterlist:
           display: "Yes"
         - value: "No"
           display: "No"
+
+    # Filtering prefix as dropdown
+    - displayname: Filtering Prefix
+      paramtype: select
+      nf_paramname: filtering_prefix
+      formvalue: "No"
+      options:
+        - value: "No"
+          display: "No"
+        - value: "mzspec:MSV"
+          display: "mzspec:MSV"
+        - value: "mzspec:NORMAN"
+          display: "mzspec:NORMAN"
+

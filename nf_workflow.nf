@@ -4,8 +4,12 @@ nextflow.enable.dsl=2
 params.input_mri_file = "./data/test_downloadpublicdata.txt"
 params.parallelism = "1"
 params.filepersplit = "1000"
+
 params.autodownload = "No"
+
 params.dryrun = "Yes"
+
+params.filtering_prefix = "No"
 
 // Parsing
 parallelism = params.parallelism.toInteger()
@@ -13,6 +17,24 @@ parallelism = params.parallelism.toInteger()
 params.datasetlocation = "/data/datasets/server"
 
 TOOL_FOLDER = "$baseDir/bin"
+
+process filterMRIFile {
+    publishDir "./nf_output", mode: 'copy'
+
+    conda "$TOOL_FOLDER/conda_env.yml"
+
+    input:
+    file input_mri_file
+    val filtering_prefix
+
+    output:
+    file 'filtered_mri_file.tsv'
+
+    script:
+    """
+    (head -n 1 $input_mri_file && grep '$filtering_prefix' $input_mri_file) > filtered_mri_file.tsv
+    """
+}
 
 process splitInput {
     publishDir "./nf_output", mode: 'copy'
@@ -104,11 +126,20 @@ workflow {
     dataset_location_ch = Channel.fromPath(params.datasetlocation)
 
     if(params.autodownload == 'Yes') {
-        mri_file_ch = autodownload(1)
+        _mri_file_ch = autodownload(1)
     }
     else{
-        mri_file_ch = Channel.fromPath(params.input_mri_file)
+        _mri_file_ch = Channel.fromPath(params.input_mri_file)
     }
+
+    // If filtering prefix is set, we filter the input file
+    if(params.filtering_prefix != 'No') {
+        mri_file_ch = filterMRIFile(_mri_file_ch, params.filtering_prefix)
+    }
+    else {
+        mri_file_ch = _mri_file_ch
+    }
+
 
 
     // Splitting input file

@@ -4,7 +4,7 @@ Views:
 -   name: Summary List
     displayname: Summary List
     viewname: summarylist
-    displaytype: datatable
+    displaytype: datatable_server
     parameters:
         filename: nf_output/summary.tsv
         columns:
@@ -30,5 +30,7 @@ Views:
                 data: ST
             -   title: "MTBLS"
                 data: MTBLS
+            -   title: "NORMAN"
+                data: NORMAN
             -   title: "Row_Total"
                 data: Row_Total
