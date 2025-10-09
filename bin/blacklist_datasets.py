@@ -16,6 +16,7 @@ def main():
     blacklist_expressions = [
         "MSV000096802",
         "MSV000084856",
+        "MSV000083532", #proteomics
     ]
 
     # Filtering out blacklisted datasets
