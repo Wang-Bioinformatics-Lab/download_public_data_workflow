@@ -16,7 +16,8 @@ def main():
     blacklist_expressions = [
         "MSV000096802",
         "MSV000084856",
-        "MSV000083532", #proteomics
+        "MSV000083532", #proteomics,
+        "MSV000087046", # teddy clone
     ]
 
     # Filtering out blacklisted datasets
