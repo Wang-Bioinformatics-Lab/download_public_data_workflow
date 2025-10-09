@@ -6,7 +6,7 @@ def main():
     # parsing args
     parser = argparse.ArgumentParser(description="Filter out blacklisted datasets from a given MRI file.")
     parser.add_argument("input_mri_file", help="Input MRI file (tab-delimited).")
-    parser.add_argument("output_filtered_file", required=True, help="Output file for filtered MRI data.")
+    parser.add_argument("output_filtered_file", help="Output file for filtered MRI data.")
 
     args = parser.parse_args()
 
