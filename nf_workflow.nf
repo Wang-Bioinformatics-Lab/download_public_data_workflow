@@ -18,24 +18,6 @@ params.datasetlocation = "/data/datasets/server"
 
 TOOL_FOLDER = "$baseDir/bin"
 
-process filterMRIFile {
-    publishDir "./nf_output", mode: 'copy'
-
-    conda "$TOOL_FOLDER/conda_env.yml"
-
-    input:
-    file input_mri_file
-    val filtering_prefix
-
-    output:
-    file 'filtered_mri_file.tsv'
-
-    script:
-    """
-    (head -n 1 $input_mri_file && grep '$filtering_prefix' $input_mri_file) > filtered_mri_file.tsv
-    """
-}
-
 process splitInput {
     publishDir "./nf_output", mode: 'copy'
 
@@ -69,6 +51,42 @@ process autodownload {
 
     """
     wget -O mri_file.tsv https://datasetcache.gnps2.org/dataset/downloadmri
+    """
+}
+
+process filterMRIFile {
+    publishDir "./nf_output", mode: 'copy'
+
+    conda "$TOOL_FOLDER/conda_env.yml"
+
+    input:
+    file input_mri_file
+    val filtering_prefix
+
+    output:
+    file 'filtered_mri_file.tsv'
+
+    script:
+    """
+    (head -n 1 $input_mri_file && grep '$filtering_prefix' $input_mri_file) > filtered_mri_file.tsv
+    """
+}
+
+process filterBlackLists {
+    publishDir "./nf_output", mode: 'copy'
+
+    conda "$TOOL_FOLDER/conda_env.yml"
+
+    input:
+    file input_mri_file
+
+    output:
+    file 'blacklist_filtered_mri_file.tsv'
+
+    """
+    python $TOOL_FOLDER/blacklist_datasets.py \
+    $input_mri_file \
+    blacklist_filtered_mri_file.tsv
     """
 }
 
@@ -134,12 +152,15 @@ workflow {
 
     // If filtering prefix is set, we filter the input file
     if(params.filtering_prefix != 'No') {
-        mri_file_ch = filterMRIFile(_mri_file_ch, params.filtering_prefix)
+        __mri_file_ch = filterMRIFile(_mri_file_ch, params.filtering_prefix)
     }
     else {
-        mri_file_ch = _mri_file_ch
+        __mri_file_ch = _mri_file_ch
     }
 
+    // TODO We should include a blacklist filtering code here
+
+    mri_file_ch = filterBlackLists(__mri_file_ch)
 
 
     // Splitting input file
