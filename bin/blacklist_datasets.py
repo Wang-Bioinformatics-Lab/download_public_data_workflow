@@ -16,9 +16,6 @@ def main():
     blacklist_expressions = [
         "MSV000096802",
         "MSV000084856",
-        "MSV000086685",
-        "MSV000097448",
-        "MSV000092627"
     ]
 
     # Filtering out blacklisted datasets
