@@ -39,6 +39,14 @@ parameterlist:
           display: "No"
         - value: "Yes"
           display: "Yes"
+        - value: "Accession"
+          display: "Accession"
+
+    - displayname: Dataset Accession
+      paramtype: text
+      nf_paramname: dataset_accession
+      formplaceholder: Enter MSV accession (e.g. MSV000086206)
+      formvalue: "No"
 
     # Adding Dryrun Option
     - displayname: Dryrun

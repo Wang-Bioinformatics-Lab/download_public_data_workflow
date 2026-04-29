@@ -6,6 +6,7 @@ params.parallelism = "1"
 params.filepersplit = "1000"
 
 params.autodownload = "No"
+params.dataset_accession = "No"
 
 params.dryrun = "Yes"
 
@@ -51,6 +52,22 @@ process autodownload {
 
     """
     wget -O mri_file.tsv https://datasetcache.gnps2.org/dataset/downloadmri
+    """
+}
+
+process accessionToMRI {
+    publishDir "./nf_output", mode: 'copy'
+
+    conda "$TOOL_FOLDER/conda_env.yml"
+
+    input:
+    val accession
+
+    output:
+    file 'mri_file.tsv'
+
+    """
+    python $TOOL_FOLDER/accession_to_mri.py $accession mri_file.tsv
     """
 }
 
@@ -145,6 +162,9 @@ workflow {
 
     if(params.autodownload == 'Yes') {
         _mri_file_ch = autodownload(1)
+    }
+    else if(params.autodownload == 'Accession') {
+        _mri_file_ch = accessionToMRI(params.dataset_accession)
     }
     else{
         _mri_file_ch = Channel.fromPath(params.input_mri_file)
