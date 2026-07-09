@@ -67,7 +67,7 @@ process accessionToMRI {
     file 'mri_file.tsv'
 
     """
-    python $TOOL_FOLDER/accession_to_mri.py $accession mri_file.tsv
+    python $TOOL_FOLDER/accession_to_mri.py "$accession" mri_file.tsv
     """
 }
 

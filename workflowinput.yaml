@@ -27,6 +27,8 @@ parameterlist:
       options:
         - value: "1"
           display: "1"
+        - value: "5"
+          display: "5"
         - value: "10"
           display: "10"
 
@@ -42,11 +44,16 @@ parameterlist:
         - value: "Accession"
           display: "Accession"
 
-    - displayname: Dataset Accession
+    - displayname: Dataset Accession(s)
       paramtype: text
       nf_paramname: dataset_accession
-      formplaceholder: Enter MSV accession (e.g. MSV000086206)
-      formvalue: "No"
+      formplaceholder: Enter one or more accessions, semicolon-separated (e.g. MSV000086206;MSV000086207)
+      formvalue: ""
+      tooltip: "Enter one or more dataset accessions separated by semicolons. All of their files are combined into a single download. Only used when autodownload is set to Accession."
+      showif:
+        - condition:
+          - key: autodownload
+            value: 'Accession'
 
     # Adding Dryrun Option
     - displayname: Dryrun
